@@ -20,6 +20,13 @@ function LogInForm (props){
     <Field type="email" name="email" placeholder=" email"/>
     {errors.password && touched.password && <p className='error'>{errors.password}</p>}
     <Field type="password" name="password" placeholder="password"/>
+    {errors.role && touched.role && <p className='error'>{errors.role}</p>}
+    <Field component="select" name="role">
+      <option value="">Select your role:</option>
+      <option value="Front-End Developer">Front-End Dev</option>
+      <option value="Back-End Developer">Back-End Dev</option>
+      <option value="Full-Stack Developer">Full-Stack Dev</option>
+    </Field>
     <label>     
       <Field type="checkbox" name="service" />
        <span>Terms Of Service</span>
@@ -29,7 +36,7 @@ function LogInForm (props){
     { users.length === 0 ? <p>Loading users...</p> :
       users.map( (user,index) => {
         return(
-          <p key={index}>{user.name}</p>
+          <p key={index}>{user.name}:{user.role}</p>
         )
       })
     }
@@ -43,6 +50,7 @@ export default withFormik({
        name: values.name || '',
        email: values.email || '',
        password: values.password || '',
+       role: values.role || '',
        service: values.service || ''
      }
    },
@@ -50,6 +58,7 @@ export default withFormik({
       name:yup.string().required("Username is required"),
       email:yup.string().required('Your Email is Required'),
       password:yup.string().required() .min(8, 'Should be at lease 8 characters'),
+      role:yup.string().required('Choose your role'),
       service:yup.boolean().oneOf([true], 'Must Accept Terms Of Service Policy')     
    }),
    handleSubmit: (values, {setStatus}) => {
